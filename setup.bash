@@ -14,8 +14,6 @@ ln -sf ($pwd)/xdg_config/vim $XDG_CONFIG_DIR/vim
 #   export ZDOTDIR="$XDG_CONFIG_HOME/zsh/"
 # fi
 
-
-
 # check if scrip run from setup.bash directory
 
 # check XDG Env and exit if not set
