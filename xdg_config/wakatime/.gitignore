@@ -1,3 +1,7 @@
 wakatime.cfg
 .wakatime.cfg
 .wakatime
+
+*.cfg
+*.log
+*.bdb
