@@ -12,6 +12,7 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="archcraft"
+# ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -73,7 +74,7 @@ ZSH_THEME="archcraft"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git rust bun sudo supervisor docker)
+plugins=(git rust bun sudo supervisor docker zsh-uv-env dotenv)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -103,3 +104,6 @@ fi
 
 # bun completions
 [ -s "/home/takimoysha/.bun/_bun" ] && source "/home/takimoysha/.bun/_bun"
+
+
+# 
