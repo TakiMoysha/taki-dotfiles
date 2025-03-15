@@ -1,5 +1,5 @@
 . "$HOME/.cargo/env"
 
-export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-export HISTFILE="$XDG_STATE_HOME/zsh/zhistory"
 export WAKATIME_HOME="$XDG_CONFIG_HOME/wakatime"
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/pythonrc.py"
+export GOPATH="$XDG_DATA_HOME/go"
