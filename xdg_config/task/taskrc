@@ -6,14 +6,12 @@ news.version=3.4.0
 weekstart=Monday
 
 ## Context definitions
-# context.work.read=-MAYBE +WORK or +ANY
-# context.work.write=+WORK
-# context.home.read=-MAYBE +HOME or +ANY
-# context.home.write=+HOME
-# context.any.read=-MAYBE +ANY
-# context.any.write=+ANY
-# context.shop.read=-MAYBE +SHOP
-# context.shop.write=+SHOP
+context.workstation.read=-MAYBE +WORKSTATION or +ANY
+context.workstation.write=+WORKSTATION
+context.devlab.read=-MAYBE +DEVLAB or +ANY
+context.devlab.write=+DEVLAB
+context.job.read=-MAYBE +JOB or +ANY
+context.job.write=+JOB
 
 ## user defined attributes
 # uda.estimate.type=numeric
@@ -34,7 +32,9 @@ report.in.filter=status:pending limit:page (+in)
 report.next.labels=ID,Active,Age,Deps,P,Project,Tag,Recur,S,Due,Until,Description,Urg
 report.next.columns=id,start.age,entry.age,depends,priority,project,tags,recur,scheduled.countdown,due.relative,until.remaining,description,urgency
 
-report.current_tasks.labels=ID,Active,Description
+report.current_tasks.labels=ID,Description
+report.current_tasks.columns=id,description
+report.current_tasks.filter=(+ACTIVE)
 
 ## taskd server configuration
 # taskd.server=taskd.schinz.de:53589
