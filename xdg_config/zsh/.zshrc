@@ -74,7 +74,7 @@ ZSH_THEME="archcraft"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git rust bun sudo supervisor docker zsh-uv-env dotenv)
+plugins=(git rust bun sudo supervisor docker zsh-uv-env dotenv taskwarrior)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -95,15 +95,11 @@ fi
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 
 . "$HOME/.cargo/env"
 
 # bun completions
 [ -s "/home/takimoysha/.bun/_bun" ] && source "/home/takimoysha/.bun/_bun"
 
-
-# 
+# development aliases
+alias init_pypackage="uv init --package"
