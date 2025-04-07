@@ -19,7 +19,7 @@ def setup_history():
     except FileNotFoundError:  # Probably the parent directory doesn't exist
         histfile.parent.mkdir(parents=True, exist_ok=True)
 
-    print(f"Using history file: {histfile}")
+    print(f"HISTFILE: {histfile}")
     readline.read_history_file(str(histfile))
     atexit.register(readline.write_history_file, str(histfile))
 

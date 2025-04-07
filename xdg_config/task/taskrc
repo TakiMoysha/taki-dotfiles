@@ -5,14 +5,6 @@ news.version=3.4.0
 
 weekstart=Monday
 
-## Context definitions
-context.workstation.read=-MAYBE +WORKSTATION or +ANY
-context.workstation.write=+WORKSTATION
-context.devlab.read=-MAYBE +DEVLAB or +ANY
-context.devlab.write=+DEVLAB
-context.job.read=-MAYBE +JOB or +ANY
-context.job.write=+JOB
-
 ## user defined attributes
 # uda.estimate.type=numeric
 # uda.estimate.label=Estimate
@@ -51,12 +43,26 @@ report.current_tasks.filter=(+ACTIVE)
 ## Color theme (uncomment one to use)
 include /usr/share/doc/task/rc/solarized-dark-256.theme
 
-# Date                                                                                           
-# date.iso=yes                                                                                     
-# dateformat=D-M-Y                                                                                 
-# dateformat.edit=D-M-Y H:N:S                                                                      
-# dateformat.holiday=DMY                                                                           
-# dateformat.info=D-M-Y H:N:S                                                                      
+# Date
+# date.iso=yes
+# dateformat=D-M-Y
+# dateformat.edit=D-M-Y H:N:S
+# dateformat.holiday=DMY
+# dateformat.info=D-M-Y H:N:S
 
-context.devlab.read=+linux
-context.devlab.write=+linux
+## Context definitions
+# https://randomgeekery.org/post/2018/02/taskwarrior-contexts/
+# context.job.read=-MAYBE +job or +any
+# context.job.write=+job
+#
+# context.blog.read=-MAYBE +blog or +any
+# context.blog.write=+blog
+#
+# context.devlab.read=-MAYBE +devlab or +any
+# context.devlab.write=+devlab
+
+context.blog.read=-job
+
+context.devlab.read=+devlab
+context.devlab.write=+devlab
+
