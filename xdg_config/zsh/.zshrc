@@ -1,16 +1,14 @@
 export ZSH="$XDG_DATA_HOME/oh-my-zsh"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-export HISTFILE="$XDG_STATE_HOME/zsh/zhistory"
-
 
 # bun completions
 [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
 [ -s "$CARGO_HOME/env" ] && . "$CARGO_HOME/env"
 
 
-ZSH_THEME="3den"
-# ZSH_THEME="robbyrussell"
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+# ZSH_THEME="awesomepanda"
+# ZSH_THEME="cloud"
+ZSH_THEME="daveverwer"
 
 source $ZSH/oh-my-zsh.sh # should be after zsh env variables
 
