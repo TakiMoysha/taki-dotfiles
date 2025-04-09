@@ -7,12 +7,12 @@ export HISTFILE="$XDG_STATE_HOME/zsh/zhistory"
 [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
 [ -s "$CARGO_HOME/env" ] && . "$CARGO_HOME/env"
 
+source $ZSH/oh-my-zsh.sh
 
-ZSH_THEME="3den"
+ZSH_THEME="random"
+# ZSH_THEME="archcraft"
 # ZSH_THEME="robbyrussell"
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-source $ZSH/oh-my-zsh.sh # should be after zsh env variables
 
 # CASE_SENSITIVE="true"
 # HYPHEN_INSENSITIVE="true" # to use hyphen-insensitive completion, [case-sensitity must be off. _ and - will be interchangeable]
