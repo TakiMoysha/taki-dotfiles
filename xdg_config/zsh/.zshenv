@@ -12,7 +12,6 @@ export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
 
-export HISTFILE="$XDG_STATE_HOME/zsh/history"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 export DOCKE_CONFIG="$XDG_CONFIG_HOME/docker"
 export MPLAYER_HOME="$XDG_CONFIG_HOME/mplayer"
