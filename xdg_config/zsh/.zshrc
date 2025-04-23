@@ -42,9 +42,17 @@ fi
 # workstation env
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
+export STOREDIR="$HOME/linux-media"
+
+export DEVLAB_CODING_DIR="$HOME/devlab/coding"
+export DEVLAB_CONTAINERS_DIR="$STOREDIR/containers/devlab"
+
+
+
 # development aliases
 alias init_pypackage="uv init --package"
 alias ws="websocat"
+alias devlab="cd /home/takimoysha/devlab/coding"
 
 function unpack() {
     if [[ -f $1 ]]; then
@@ -71,3 +79,32 @@ function unpack() {
 
 
 function nicemount() { (echo "DEVICE PATH TYPE FLAGS" && mount | awk '$2="";1') | column -t ; }
+
+function devlab_postgres() {
+  dir="$DEVLAB_CONTAINERS_DIR/postgres"
+  name="devlab_postgres"
+  if [ ! -d "$dir" ]; then
+    echo "Directory <$dir> does not exist"
+    return 1
+  fi
+
+  if [[ "$1" == "up" ]]; then
+    if [[ $(docker ps -a -f "name=$name") ]]; then
+      echo "Starting container <$name>..."
+      docker start $name
+    else
+      echo "Running new container <$name>..."
+      docker run --name $name -v "$dir:/bitnami/postgresql" --network host -e POSTGRES_PASSWORD=postgres -d bitnami/postgresql:latest
+    fi
+  elif [[ "$1" == "down" ]]; then
+    if [[ $(docker ps -f "name=$name") ]]; then
+      echo "Stopping container <$name>..."
+      docker stop $name
+    else
+      echo "Container <$name> is not running."
+    fi
+  else
+    echo "Usage: devlab_postgres {up|down}"
+    return 1
+  fi
+}
