@@ -30,7 +30,7 @@ zstyle ':omz:update' frequency 13 # how often to check for updates
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git rust bun sudo supervisor docker zsh-uv-env dotenv taskwarrior uv)
+plugins=(git rust bun sudo supervisor docker zsh-uv-env dotenv taskwarrior uv kubectl)
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
@@ -39,8 +39,12 @@ else
   export EDITOR='nvim'
 fi
 
+# workstation env
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
 # development aliases
 alias init_pypackage="uv init --package"
+alias ws="websocat"
 
 function unpack() {
     if [[ -f $1 ]]; then

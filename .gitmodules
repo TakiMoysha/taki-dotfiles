@@ -1,4 +1,4 @@
 
-[submodule "taki-sway"]
-	path = taki-sway
+[submodule "sway"]
+	path = sway
 	url = git@github.com:TakiMoysha/taki-sway.git
