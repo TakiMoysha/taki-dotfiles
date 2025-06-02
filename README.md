@@ -1,6 +1,7 @@
 # Tools
 
 - `xdg-ninja` - для настройки XDG окружения;
+- `stow` - symlink farm manager;
 
 # User session variables
 

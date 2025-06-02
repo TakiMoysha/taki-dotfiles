@@ -1,4 +1,5 @@
-# create links with absolute path
+mkdir -p ~/.config/{alacritty,bash,python,task,vim,wakatime,wluma,zsh}
+
 ln -sf ($pwd)/.profile $HOME/.profile
 ln -sf ($pwd)/xdg_config/zsh $XDG_CONFIG_DIR/zsh
 ln -sf ($pwd)/xdg_config/vim $XDG_CONFIG_DIR/vim
