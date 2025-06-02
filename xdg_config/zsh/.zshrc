@@ -17,7 +17,7 @@ source $ZSH/oh-my-zsh.sh # should be after zsh env variables
 
 zstyle ':omz:update' frequency 13 # how often to check for updates
 
-# DISABLE_MAGIC_FUNCTIONS="true" # if pasting urls and other text is messed up
+DISABLE_MAGIC_FUNCTIONS="true" # if pasting urls and other text is messed up
 # DISABLE_LS_COLORS="true" # to colors are messed up
 # DISABLE_AUTO_TITLE="true" # disables automatic title setting
 # ENABLE_CORRECTION="true" # enable command auto-correction
@@ -30,7 +30,10 @@ zstyle ':omz:update' frequency 13 # how often to check for updates
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git rust bun sudo supervisor docker zsh-uv-env dotenv taskwarrior uv kubectl)
+plugins=(git rust bun sudo supervisor docker podman kubectl Kube-ps1 zsh-uv-env dotenv taskwarrior uv)
+
+# autocompletions for k8s
+source <(kubectl completion zsh)
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
@@ -40,19 +43,19 @@ else
 fi
 
 # workstation env
-export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
-export STOREDIR="$HOME/linux-media"
+#
+if type clipcat-menu >/dev/null 2>&1; then
+  alias clipedit=" clipcat-menu --finder=builtin edit"
+  alias clipdel=" clipcat-menu --finder=builtin remove"
 
-export DEVLAB_CODING_DIR="$HOME/devlab/coding"
-export DEVLAB_CONTAINERS_DIR="$STOREDIR/containers/devlab"
-
-
+  bindkey -s '^\' "^Q clipcat-menu --finder=builtin insert ^J"
+fi
 
 # development aliases
 alias init_pypackage="uv init --package"
 alias ws="websocat"
-alias devlab="cd /home/takimoysha/devlab/coding"
+alias uvr="uv run"
 
 function unpack() {
     if [[ -f $1 ]]; then
@@ -80,31 +83,99 @@ function unpack() {
 
 function nicemount() { (echo "DEVICE PATH TYPE FLAGS" && mount | awk '$2="";1') | column -t ; }
 
-function devlab_postgres() {
-  dir="$DEVLAB_CONTAINERS_DIR/postgres"
-  name="devlab_postgres"
-  if [ ! -d "$dir" ]; then
-    echo "Directory <$dir> does not exist"
+# for localstack compability https://docs.localstack.cloud/references/podman/
+alias docker=podman
+
+alias rabbitmq_up="podman run -d --replace --name devlab-rabbitmq.dev --network host -e RABBITMQ_USERNAME=devlab -e RABBITMQ_PASSWORD=123321 docker.io/bitnami/rabbitmq:latest"
+alias postgres_up="podman run -d --replace --name devlab-postgres --health-cmd 'pg_isready -h localhost -q' -v '$DEVLAB_CONTAINERS_DIR/postgresql:/bitnami/postgresql' -e POSTGRES_PASSWORD=postgres --network host --user=$(id -u) --userns=keep-id docker.io/bitnami/postgresql:latest"
+alias redis_up="podman run -d --replace --name devlab-redis.dev -e ALLOW_EMPTY_PASSWORD=yes --network host docker.io/bitnami/redis:latest"
+alias minio_up="podman run -d --replace  \\
+  --network host  \\
+  --name devlab-minio.dev  \\
+  -v '$DEVLAB_CONTAINERS_DIR/minio:/bitnami/minio/data' \\
+  -e MINIO_ROOT_USER='minio-root'  \\
+  -e MINIO_ROOT_PASSWORD='minio-root-password'  \\
+  -e MINIO_SERVER_ACCESS_KEY='minio-access-key' \\
+  -e MINIO_SERVER_SECRET_KEY='minio-secret-key' \\
+  --user=$(id -u) --userns=keep-id  \\
+  docker.io/bitnami/minio:latest"
+
+function master() {
+  # TODO: required created volume: podman volume create devlab-postgrs -o device=$DEVLAB_CONTAINERS_DIR/postgres 
+  name="devlab-postgres"
+
+  _unknow_service_text="Unknow service, supported: [rabbitmq, postgresql, redis]"
+  _unknow_service_command_text="Unknow service command"
+
+  if [[ "$1" == "postgres" || "$1" == "postgresql" ]]; then
+
+    if [[ "$2" == "up" ]]; then
+      postgres_up 
+    elif [[ "$2" == "down" ]]; then
+      if [[ $(podman ps -f "name=$name") ]]; then
+        podman stop $name
+      else
+        echo "Container <$name> is not running."
+      fi
+    else
+      echo "postgres: $_unknow_service_command_text"
+      return 1
+    fi
+
+  elif [[ "$1" == "rabbit" || "$1" == "rabbitmq" ]]; then
+    if [[ $2 == "up" ]]; then
+      rabbitmq_up
+    elif [[ $2 == "down" ]]; then
+      echo "not implemented"
+    else
+      echo "rabbit: $_unknow_service_command_text"
+      return 1
+    fi
+
+
+  elif [[ "$1" == "redis" ]]; then
+    if [[ $2 == "up" ]]; then
+      rabbitmq_up
+    elif [[ $2 == "down" ]]; then
+      echo "not implemented"
+    else
+      echo "redis: $_unknow_service_command_text"
+      return 1
+    fi
+
+
+  # elif [[ "$1" == "rabbit" || "$1" == "rabbitmq" ]]; then
+
+  else
+    echo $_unknow_service_text
+    return 1
+  fi
+}
+
+
+function init_devlab() {  
+  if [[ -z "$DEVLAB_CODING_DIR" ]]; then
+    echo "Error: DEVLAB_CODING_DIR is not set."
     return 1
   fi
 
-  if [[ "$1" == "up" ]]; then
-    if [[ $(docker ps -a -f "name=$name") ]]; then
-      echo "Starting container <$name>..."
-      docker start $name
-    else
-      echo "Running new container <$name>..."
-      docker run --name $name -v "$dir:/bitnami/postgresql" --network host -e POSTGRES_PASSWORD=postgres -d bitnami/postgresql:latest
-    fi
-  elif [[ "$1" == "down" ]]; then
-    if [[ $(docker ps -f "name=$name") ]]; then
-      echo "Stopping container <$name>..."
-      docker stop $name
-    else
-      echo "Container <$name> is not running."
-    fi
-  else
-    echo "Usage: devlab_postgres {up|down}"
+  if [[ -z "$STOREDIR" ]]; then
+    echo "Error: STOREDIR is not set."
     return 1
+  fi
+
+
+  if [[ ! -d "$DEVLAB_CODING_DIR" ]]; then
+    mkdir -p "$DEVLAB_CODING_DIR"
+    echo "Created directory: $DEVLAB_CODING_DIR"
+  else
+    echo "Directory already exists <DEVLAB_CODING_DIR>: $DEVLAB_CODING_DIR"
+  fi
+
+  if [[ ! -d "$DEVLAB_CONTAINERS_DIR" ]]; then
+    mkdir -p "$DEVLAB_CONTAINERS_DIR"
+    echo "Created directory: $DEVLAB_CONTAINERS_DIR"
+  else
+    echo "Directory already exists <DEVLAB_CONTAINERS_DIR>: $DEVLAB_CONTAINERS_DIR"
   fi
 }
