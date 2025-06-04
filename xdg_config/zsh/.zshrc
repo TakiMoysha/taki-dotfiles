@@ -86,13 +86,29 @@ function nicemount() { (echo "DEVICE PATH TYPE FLAGS" && mount | awk '$2="";1') 
 # for localstack compability https://docs.localstack.cloud/references/podman/
 alias docker=podman
 
-alias rabbitmq_up="podman run -d --replace --name devlab-rabbitmq.dev --network host -e RABBITMQ_USERNAME=devlab -e RABBITMQ_PASSWORD=123321 docker.io/bitnami/rabbitmq:latest"
-alias postgres_up="podman run -d --replace --name devlab-postgres --health-cmd 'pg_isready -h localhost -q' -v '$DEVLAB_CONTAINERS_DIR/postgresql:/bitnami/postgresql' -e POSTGRES_PASSWORD=postgres --network host --user=$(id -u) --userns=keep-id docker.io/bitnami/postgresql:latest"
-alias redis_up="podman run -d --replace --name devlab-redis.dev -e ALLOW_EMPTY_PASSWORD=yes --network host docker.io/bitnami/redis:latest"
+alias rabbitmq_up="podman run -d --replace \\
+  --name devlab-rabbitmq.dev \\
+  --network host \\
+  -e RABBITMQ_USERNAME=devlab \\
+  -e RABBITMQ_PASSWORD=123321 \\
+  docker.io/bitnami/rabbitmq:latest"
+alias postgres_up="podman run -d --replace \\
+  --name devlab-postgres \\
+  --health-cmd 'pg_isready -h localhost -q' \\
+  -v 'devlab-postgres:/bitnami/postgresql' \\
+  -e POSTGRES_PASSWORD=postgres \\
+  --network host \\
+  --user=$(id -u) \\
+  --userns=keep-id docker.io/bitnami/postgresql:latest"
+alias redis_up="podman run -d --replace \\
+  --name devlab-redis.dev \\
+  -e ALLOW_EMPTY_PASSWORD=yes \\
+  --network host \\
+  docker.io/bitnami/redis:latest"
 alias minio_up="podman run -d --replace  \\
   --network host  \\
   --name devlab-minio.dev  \\
-  -v '$DEVLAB_CONTAINERS_DIR/minio:/bitnami/minio/data' \\
+  -v 'homelab-minio:/bitnami/minio/data' \\
   -e MINIO_ROOT_USER='minio-root'  \\
   -e MINIO_ROOT_PASSWORD='minio-root-password'  \\
   -e MINIO_SERVER_ACCESS_KEY='minio-access-key' \\

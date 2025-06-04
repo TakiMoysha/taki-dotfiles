@@ -27,7 +27,7 @@ export PATH="$CARGO_HOME/bin:$BUN_INSTALL/bin:$XDG_BIN_HOME:$PATH"
 export STOREDIR="$HOME/linux-media"
 
 export DEVLAB_CODING_DIR="$HOME/devlab/coding"
-export DEVLAB_CONTAINERS_DIR="$STOREDIR/containers/devlab"
+# export DEVLAB_CONTAINERS_DIR="$STOREDIR/containers/devlab" # inspect
 
 # homelab
 export HOMELAB_CONTAINERS_DIR="$STOREDIR/containers/homelab"
