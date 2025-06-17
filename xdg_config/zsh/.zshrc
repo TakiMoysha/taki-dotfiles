@@ -86,6 +86,36 @@ function nicemount() { (echo "DEVICE PATH TYPE FLAGS" && mount | awk '$2="";1') 
 # for localstack compability https://docs.localstack.cloud/references/podman/
 alias docker=podman
 
+alias kafka_server_up="podman run -d --replace \\
+  --name devlab-kafka.dev \\
+  --network host \\
+  --pod devlab-kafka.pod \\
+  -e KAFKA_CFG_NODE_ID=0 \\
+  -e KAFKA_CFG_PROCESS_ROLES=controller,broker \\
+  -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 \\
+  -e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT \\
+  -e KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@devlab-kafka.dev:9093 \\
+  -e KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER \\
+  docker.io/bitnami/kafka:latest"
+alias kafka_client_up="podman run -d --replace \\
+  --name devlab-kafka-client \\
+  --network host \\
+  --pod devlab-kafka.pod \\
+  -e KAFKA_CFG_NODE_ID=1 \\
+  -e KAFKA_CFG_PROCESS_ROLES=client \\
+  -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092 \\
+  -e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT \\
+  -e KAFKA_CFG_ZOOKEEPER_CONNECT=devlab-zookeeper:2181 \\
+  docker.io/bitnami/kafka:latest"
+alias zookeeper_up="podman run -d --replace \\
+  --name devlab-zookeeper \\
+  --network host \\
+  --pod devlab-kafka.pod \\
+  docker.io/bitnami/zookeeper:latest"
+alias mongodb_up="podman run -d --replace \\
+  --name devlab-mongodb.dev \\
+  --network host \\
+  docker.io/bitnami/mongodb:latest"
 alias rabbitmq_up="podman run -d --replace \\
   --name devlab-rabbitmq.dev \\
   --network host \\
