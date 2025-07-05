@@ -1,6 +1,9 @@
 export ZSH="$XDG_DATA_HOME/oh-my-zsh"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
+export ENCORE_INSTALL="$HOME/.encore"
+export PATH="$ENCORE_INSTALL/bin:$PATH"
+
 # bun completions
 [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
 [ -s "$CARGO_HOME/env" ] && . "$CARGO_HOME/env"
@@ -30,7 +33,7 @@ DISABLE_MAGIC_FUNCTIONS="true" # if pasting urls and other text is messed up
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git rust bun sudo supervisor docker podman kubectl Kube-ps1 zsh-uv-env dotenv taskwarrior uv)
+plugins=(git rust bun sudo supervisor podman  docker kubectl Kube-ps1 zsh-uv-env dotenv taskwarrior uv tmux)
 
 # autocompletions for k8s
 source <(kubectl completion zsh)
