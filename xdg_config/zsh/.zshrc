@@ -8,6 +8,8 @@ export PATH="$ENCORE_INSTALL/bin:$PATH"
 [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
 [ -s "$CARGO_HOME/env" ] && . "$CARGO_HOME/env"
 
+# tuning
+eval "$(~/.local/bin/mise activate zsh)"
 
 # ZSH_THEME="awesomepanda"
 # ZSH_THEME="cloud"
@@ -59,6 +61,17 @@ fi
 alias init_pypackage="uv init --package"
 alias ws="websocat"
 alias uvr="uv run"
+
+alias vs="meld"
+
+function yay-update() {
+  yay -Syu
+  # обновление конфигураций: pacdiff
+  # проверка состояния: pacman -Qk
+  """
+  cat /etc/issue -> Archcraft \r (\l)
+  """
+}
 
 function unpack() {
     if [[ -f $1 ]]; then
