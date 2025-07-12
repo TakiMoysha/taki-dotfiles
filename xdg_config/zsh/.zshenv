@@ -1,14 +1,3 @@
-# ============================================================ debug
-# export QT_QPA_PLATFORM="wayland;xcb"
-# export QT_QPA_PLATFORMTHEME=qt5ct
-# export CLUTTER_BACKEND=wayland
-# export XDG_CURRENT_DESKTOP=sway
-# export XDG_SESSION_DESKTOP=sway
-# export XDG_SESSION_TYPE=wayland
-# export SDL_VIDEODRIVER=wayland
-# export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-# =============================================================
-
 export XDG_CACHE_HOME="$HOME/linux-media/system/pcl-89/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
@@ -26,6 +15,7 @@ export BUN_INSTALL="$XDG_DATA_HOME/bun"
 
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 export DOCKE_CONFIG="$XDG_CONFIG_HOME/docker"
+export MINIKUBE_HOME="$XDG_DATA_HOME/minikube"
 export MPLAYER_HOME="$XDG_CONFIG_HOME/mplayer"
 export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
 export NPM_CONFIG="$XDG_CONFIG_HOME/npm/npmrc"
@@ -42,3 +32,17 @@ export DEVLAB_CODING_DIR="$HOME/devlab/coding"
 
 # homelab
 export HOMELAB_CONTAINERS_DIR="$STOREDIR/containers/homelab"
+
+# ============================================================ debug
+export ANDROID_USER_HOME="$XDG_DATA_HOME/android"
+# export QT_QPA_PLATFORM="wayland;xcb"
+# export QT_QPA_PLATFORMTHEME=qt5ct
+# export CLUTTER_BACKEND=wayland
+# export XDG_CURRENT_DESKTOP=sway
+# export XDG_SESSION_DESKTOP=sway
+# export XDG_SESSION_TYPE=wayland
+# export SDL_VIDEODRIVER=wayland
+# export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+# =============================================================
+
+

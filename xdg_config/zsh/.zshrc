@@ -57,15 +57,21 @@ if type clipcat-menu >/dev/null 2>&1; then
   bindkey -s '^\' "^Q clipcat-menu --finder=builtin insert ^J"
 fi
 
+# facility aliases
+alias nvidia-settings="nvidia-settings --config=$XDG_CONFIG_HOME/nvidia/settings"
+alias filediff="meld"
+
 # development aliases
 alias init_pypackage="uv init --package"
 alias ws="websocat"
 alias uvr="uv run"
-
-alias vs="meld"
+# alias adb='HOME="$XDG_DATA_HOME"/android adb' # is used in android development
 
 function yay-update() {
-  yay -Syu
+  """first - read news, if all good - update, else prevent"""
+  # informant read
+  # yay -Syu
+
   # обновление конфигураций: pacdiff
   # проверка состояния: pacman -Qk
   """
