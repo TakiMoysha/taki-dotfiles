@@ -1,0 +1,11 @@
+[settings]
+experimental = true # for ...
+disable_hints = ["*"]
+
+# always_keep_install = false
+# always_keep_download = false
+
+idiomatic_version_file_enable_tools = ["bun", "node", ]
+
+[tools]
+rust = "latest"
