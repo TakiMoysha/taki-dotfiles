@@ -43,3 +43,5 @@ For Wayland: `envvars.conf -> ~/.config/environment/envvars.conf`
 ## ZRAM
 
 Компрессия для блоков памяти в RAM.
+
+## PAM Module

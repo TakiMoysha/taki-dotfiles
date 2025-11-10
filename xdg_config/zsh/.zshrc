@@ -1,3 +1,5 @@
+set enable-bracketed-paste off
+
 export ZSH="$XDG_DATA_HOME/oh-my-zsh"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
@@ -10,6 +12,7 @@ export PATH="$ENCORE_INSTALL/bin:$PATH"
 
 # tuning
 eval "$(~/.local/bin/mise activate zsh)"
+eval "$(zoxide init zsh)"
 
 # ZSH_THEME="awesomepanda"
 # ZSH_THEME="cloud"
@@ -18,7 +21,7 @@ ZSH_THEME="daveverwer"
 source $ZSH/oh-my-zsh.sh # should be after zsh env variables
 
 # CASE_SENSITIVE="true"
-# HYPHEN_INSENSITIVE="true" # to use hyphen-insensitive completion, [case-sensitity must be off. _ and - will be interchangeable]
+# HYPHEN_INSENSITIVE="true" # to use hyphen-insensitive completion, [case-sensitivity must be off. _ and - will be interchangeable]
 
 zstyle ':omz:update' frequency 13 # how often to check for updates
 
@@ -35,7 +38,23 @@ DISABLE_MAGIC_FUNCTIONS="true" # if pasting urls and other text is messed up
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git rust bun sudo supervisor podman  docker kubectl Kube-ps1 zsh-uv-env dotenv taskwarrior uv tmux)
+plugins=(
+    git
+    rust
+    bun
+    sudo
+    supervisor
+    podman
+    docker
+    kubectl
+    # Kube-ps1
+    zsh-uv-env
+    dotenv
+    taskwarrior
+    uv
+    poetry
+    tmux
+  )
 
 # autocompletions for k8s
 source <(kubectl completion zsh)
@@ -62,9 +81,10 @@ alias nvidia-settings="nvidia-settings --config=$XDG_CONFIG_HOME/nvidia/settings
 alias filediff="meld"
 
 # development aliases
-alias init_pypackage="uv init --package"
+alias py_create_package="uv init --package"
 alias ws="websocat"
 alias uvr="uv run"
+alias ctunnel="cloudflared tunnel"
 # alias adb='HOME="$XDG_DATA_HOME"/android adb' # is used in android development
 
 function yay-update() {
@@ -105,8 +125,10 @@ function unpack() {
 
 function nicemount() { (echo "DEVICE PATH TYPE FLAGS" && mount | awk '$2="";1') | column -t ; }
 
-# for localstack compability https://docs.localstack.cloud/references/podman/
-alias docker=podman
+# for localstack compatibility https://docs.localstack.cloud/references/podman/
+# alias docker=podman
+alias pdm=podman
+alias bp=boilerplates # for https://github.com/ChristianLempa/boilerplates/issues
 
 alias kafka_server_up="podman run -d --replace \\
   --name devlab-kafka.dev \\
@@ -157,6 +179,7 @@ alias redis_up="podman run -d --replace \\
   -e ALLOW_EMPTY_PASSWORD=yes \\
   --network host \\
   docker.io/bitnami/redis:latest"
+
 alias minio_up="podman run -d --replace  \\
   --network host  \\
   --name devlab-minio.dev  \\
@@ -168,57 +191,6 @@ alias minio_up="podman run -d --replace  \\
   --user=$(id -u) --userns=keep-id  \\
   docker.io/bitnami/minio:latest"
 
-function master() {
-  # TODO: required created volume: podman volume create devlab-postgrs -o device=$DEVLAB_CONTAINERS_DIR/postgres 
-  name="devlab-postgres"
-
-  _unknow_service_text="Unknow service, supported: [rabbitmq, postgresql, redis]"
-  _unknow_service_command_text="Unknow service command"
-
-  if [[ "$1" == "postgres" || "$1" == "postgresql" ]]; then
-
-    if [[ "$2" == "up" ]]; then
-      postgres_up 
-    elif [[ "$2" == "down" ]]; then
-      if [[ $(podman ps -f "name=$name") ]]; then
-        podman stop $name
-      else
-        echo "Container <$name> is not running."
-      fi
-    else
-      echo "postgres: $_unknow_service_command_text"
-      return 1
-    fi
-
-  elif [[ "$1" == "rabbit" || "$1" == "rabbitmq" ]]; then
-    if [[ $2 == "up" ]]; then
-      rabbitmq_up
-    elif [[ $2 == "down" ]]; then
-      echo "not implemented"
-    else
-      echo "rabbit: $_unknow_service_command_text"
-      return 1
-    fi
-
-
-  elif [[ "$1" == "redis" ]]; then
-    if [[ $2 == "up" ]]; then
-      rabbitmq_up
-    elif [[ $2 == "down" ]]; then
-      echo "not implemented"
-    else
-      echo "redis: $_unknow_service_command_text"
-      return 1
-    fi
-
-
-  # elif [[ "$1" == "rabbit" || "$1" == "rabbitmq" ]]; then
-
-  else
-    echo $_unknow_service_text
-    return 1
-  fi
-}
 
 
 function init_devlab() {  

@@ -10,18 +10,19 @@ def setup_history():
     import readline
     from pathlib import Path
 
-    histfile = (
-        Path(os.getenv("XDG_STATE_HOME", Path.home() / ".cache")) / "python_history"
-    )
+    histfile = Path(os.getenv("XDG_STATE_HOME", Path.home() / ".cache")) / "python_history"
 
     try:
+        histfile.parent.mkdir(parents=True, exist_ok=True)
         histfile.touch(exist_ok=True)
     except FileNotFoundError:  # Probably the parent directory doesn't exist
-        histfile.parent.mkdir(parents=True, exist_ok=True)
+        pass
 
     print(f"HISTFILE: {histfile}")
-    readline.read_history_file(str(histfile))
-    atexit.register(readline.write_history_file, str(histfile))
+    if histfile.exists():
+        readline.read_history_file(str(histfile))
+
+    atexit.register(readline.write_history_file, str(histfile))  # execute write_history_file while call `exit()`
 
 
 if is_vanilla():
