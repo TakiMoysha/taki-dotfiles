@@ -1,5 +1,4 @@
 export XDG_CACHE_HOME="$HOME/linux-home/system/pcl-89/.cache"
-export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_BIN_HOME="$HOME/.local/bin"
@@ -25,10 +24,10 @@ export NVM_DIR="$XDG_DATA_HOME/nvm"
 # cargo, bun
 export PATH="$CARGO_HOME/bin:$BUN_INSTALL/bin:$XDG_BIN_HOME:$PATH"
 
-# devlab & workstation
+# devlab & workspace
 # export STOREDIR="$HOME/linux-media"
 
-export WORKSTATION_DIR="$HOME/workstation/"
+export WORKSPACE_DIR="$HOME/workspace/"
 
 # homelab
 #export HOMELAB_CONTAINERS_DIR="$STOREDIR/containers/homelab"
